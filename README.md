@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/shivakar/gdupes.svg?branch=master)](https://travis-ci.org/shivakar/gdupes)
+
 # gdupes
 A multithreaded tool for identifying duplicate files written in Go.
 
@@ -24,9 +26,9 @@ Usage:
   gdupes DIRECTORY... [flags]
 
 Flags:
-  -h, --help      Display this help message
-  -v, --version   Display gdupes version
-
+  -h, --help        Display this help message
+  -m, --summarize   Summarize duplicates information
+  -v, --version     Display gdupes versiongdu
 ```
 
 ## Contributing
