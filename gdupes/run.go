@@ -10,13 +10,28 @@ import (
 	"time"
 )
 
+// checkAddDirectory adds a directory to the list of directories if not already
+// present
+func checkAddDirectory(dirs []string, d string) []string {
+	for _, v := range dirs {
+		if v == d {
+			return dirs
+		}
+	}
+	return append(dirs, d)
+}
+
 // Run orchestrates gdupes execution
 func Run(c *Config, args []string) ([][]string, error) {
 	st := time.Now()
+	c.NumWorkers = 2 * runtime.NumCPU()
+	if c.Writer == nil {
+		c.Writer = os.Stdout
+	}
 
 	if c.PrintVersion {
-		fmt.Printf("gdupes v%s\n", VERSION)
-		os.Exit(0)
+		fmt.Fprintf(c.Writer, "gdupes v%s\n", VERSION)
+		return nil, nil
 	}
 	if len(args) < 1 {
 		return nil, errors.New("must specify at least one directory to scan")
@@ -25,9 +40,8 @@ func Run(c *Config, args []string) ([][]string, error) {
 		if fi, err := os.Stat(d); err != nil || !fi.IsDir() {
 			return nil, fmt.Errorf("directory '%s' does not exist", d)
 		}
-		c.Directories = append(c.Directories, d)
+		c.Directories = checkAddDirectory(c.Directories, d)
 	}
-	c.NumWorkers = 2 * runtime.NumCPU()
 
 	var wg sync.WaitGroup
 	var lock sync.Mutex
@@ -46,12 +60,14 @@ func Run(c *Config, args []string) ([][]string, error) {
 	}
 	wg.Wait()
 
-	for _, s := range fileHashes {
-		if len(s) > 1 {
-			for _, v := range s {
-				fmt.Println(v.Path)
+	if !c.Summarize {
+		for _, s := range fileHashes {
+			if len(s) > 1 {
+				for _, v := range s {
+					fmt.Fprintln(c.Writer, v.Path)
+				}
+				fmt.Fprintln(c.Writer)
 			}
-			fmt.Println()
 		}
 	}
 
@@ -75,9 +91,11 @@ func Run(c *Config, args []string) ([][]string, error) {
 		}
 	}
 
-	fmt.Printf("%d duplicate files (in %d sets), occupying %s\n",
-		nDups, nSets, HumanizeSize(float64(tSize)))
-	fmt.Println("Total time for processing: ", time.Since(st))
+	if c.Summarize {
+		fmt.Fprintf(c.Writer, "%d duplicate files (in %d sets), occupying %s.\n",
+			nDups, nSets, HumanizeSize(float64(tSize)))
+		fmt.Fprintf(c.Writer, "Total time for processing: %v\n", time.Since(st))
+	}
 
 	return out, nil
 }

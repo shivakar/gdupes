@@ -26,25 +26,25 @@ type FileMetaSlice []FileMeta
 
 // ContainsInode checks if the inode pointed to by the FileMeta is already
 // contained in the FiletMetaSlice
-func (f FileMetaSlice) ContainsInode(fm FileMeta) (bool, error) {
+func (f FileMetaSlice) ContainsInode(fm FileMeta) (bool, int, error) {
 	s, err := getStatStruct(fm.Info)
 	if err != nil {
-		return false, err
+		return false, -1, err
 	}
 	if s.Nlink == 1 {
-		return false, nil
+		return false, -1, nil
 	}
 	inode := s.Ino
-	for _, fim := range f {
+	for i, fim := range f {
 		s, err := getStatStruct(fim.Info)
 		if err != nil {
-			return false, err
+			return false, -1, err
 		}
 		if s.Ino == inode {
-			return true, nil
+			return true, i, nil
 		}
 	}
-	return false, nil
+	return false, -1, nil
 }
 
 // GetFilenames returns the list of filenames

@@ -1,6 +1,8 @@
 package gdupes_test
 
 import (
+	"bytes"
+	"fmt"
 	"os"
 	"sort"
 	"testing"
@@ -42,10 +44,12 @@ func isStringSSEqual(e [][]string, a [][]string) bool {
 func TestGdupes(t *testing.T) {
 	c := &gdupes.Config{}
 	dirs := []string{"testdata"}
+	buf := &bytes.Buffer{}
 	if err := os.Chdir(".."); err != nil {
 		panic(err)
 	}
 
+	c.Writer = buf
 	t.Run("default", func(t *testing.T) {
 		expected := [][]string{
 			{"testdata/zero.txt",
@@ -59,6 +63,7 @@ func TestGdupes(t *testing.T) {
 				"testdata/a_copy_copy.txt",
 			},
 		}
+
 		assert := assert.New(t)
 		dupfiles, err := gdupes.Run(c, dirs)
 		assert.Nil(err)
@@ -66,12 +71,23 @@ func TestGdupes(t *testing.T) {
 			"expected: %v,\ngot %v\n", expected, dupfiles)
 	})
 
-	// c.Recurse = true
-	// t.Run("--recurse", func(t *testing.T) {
-	// 	fmt.Println("Inside --recurse", c.Recurse)
-	// })
-	// c.Recurse = false
-	// t.Run("--hardlinks", func(t *testing.T) {
-	// 	fmt.Println("Inside --hardlinks", c.Recurse)
-	// })
+	c.PrintVersion = true
+	buf.Reset()
+	t.Run("--version", func(t *testing.T) {
+		assert := assert.New(t)
+		expected := fmt.Sprintf("gdupes v%s\n", gdupes.VERSION)
+		gdupes.Run(c, dirs)
+		assert.Equal(expected, buf.String())
+	})
+	c.PrintVersion = false
+
+	c.Summarize = true
+	buf.Reset()
+	t.Run("--summarize", func(t *testing.T) {
+		assert := assert.New(t)
+		expected := "4 duplicate files (in 3 sets), occupying 12 B.\nTotal time for processing: "
+		gdupes.Run(c, dirs)
+		assert.Equal(expected, buf.String()[:len(expected)])
+	})
+	c.Summarize = false
 }

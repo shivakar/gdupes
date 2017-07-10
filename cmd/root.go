@@ -58,7 +58,7 @@ func init() {
 	// RootCmd.Flags().BoolVarP(&config.NoHidden, "nohidden", "A", false, "Exclude hidden files")
 	// RootCmd.Flags().BoolVarP(&config.Sameline, "sameline", "1", false, "List set of matches on the same line")
 	// RootCmd.Flags().BoolVarP(&config.Size, "size", "S", true, "Show size of duplicate files")
-	// RootCmd.Flags().BoolVarP(&config.Summarize, "summarize", "m", true, "Summarize duplicates information")
+	RootCmd.Flags().BoolVarP(&config.Summarize, "summarize", "m", false, "Summarize duplicates information")
 	// RootCmd.Flags().BoolVarP(&config.Quiet, "quiet", "q", false, "Hide progress indicator")
 	RootCmd.Flags().BoolVarP(&config.PrintVersion, "version", "v", false, "Display gdupes version")
 	RootCmd.Flags().BoolP("help", "h", false, "Display this help message")

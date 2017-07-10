@@ -3,6 +3,7 @@ package gdupes
 import (
 	"io"
 	"os"
+	"strings"
 	"sync"
 
 	"github.com/shivakar/xxhash"
@@ -32,13 +33,13 @@ func hashFile(filepath string) string {
 // includeFileInOutput returns true if the file should be included as per
 // the given configuration
 func includeFileInOutput(c *Config, fm FileMeta,
-	fms FileMetaSlice) (bool, error) {
+	fms FileMetaSlice) (bool, int, error) {
 	if !c.Hardlinks {
 		// Not treating hardlinks as duplicates
-		inc, err := fms.ContainsInode(fm)
-		return !inc, err
+		inc, idx, err := fms.ContainsInode(fm)
+		return !inc, idx, err
 	}
-	return true, nil
+	return true, -1, nil
 }
 
 // ProcessFiles computes hashes and updates map of hashes for files to be
@@ -59,11 +60,17 @@ func ProcessFiles(c *Config, filesToProcess <-chan string,
 		if !ok {
 			fileHashes[h] = []FileMeta{fm}
 		} else {
-			inc, err := includeFileInOutput(c, fm, fileHashes[h])
+			inc, idx, err := includeFileInOutput(c, fm, fileHashes[h])
 			if err != nil {
 				panic(err)
 			}
 			if !inc {
+				// Check if this file has a longer filename. This is to ensure
+				// that regardless of what order hardlinks are processed in, you
+				// always get the same result
+				if strings.Compare(fm.Path, fileHashes[h][idx].Path) == 1 {
+					fileHashes[h][idx] = fm
+				}
 				lock.Unlock()
 				continue
 			}

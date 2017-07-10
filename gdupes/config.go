@@ -1,5 +1,7 @@
 package gdupes
 
+import "io"
+
 const VERSION = "0.1.0"
 
 // Config structure to store
@@ -16,4 +18,5 @@ type Config struct {
 	Quiet        bool
 	PrintVersion bool
 	NumWorkers   int
+	Writer       io.Writer
 }
