@@ -23,7 +23,6 @@ package cmd
 import (
 	"fmt"
 	"os"
-	"runtime"
 
 	"github.com/shivakar/gdupes/gdupes"
 	"github.com/spf13/cobra"
@@ -37,21 +36,8 @@ var RootCmd = &cobra.Command{
 	Short: "A multithreaded CLI tool for identifying duplicate files",
 	Long:  `gdupes is a multithreaded command-line tool for identifying duplicate files.`,
 	RunE: func(cmd *cobra.Command, args []string) error {
-		if len(args) < 1 {
-			return fmt.Errorf("must specify at least one directory to scan")
-		}
-		for _, d := range args {
-			if fi, err := os.Stat(d); err != nil || !fi.IsDir() {
-				return fmt.Errorf(
-					fmt.Sprintf("directory '%s' does not exist", d))
-			}
-			config.Directories = append(config.Directories, d)
-		}
-		config.NumWorkers = 2 * runtime.NumCPU()
-
-		gdupes.Run(&config)
-
-		return nil
+		_, err := gdupes.Run(&config, args)
+		return err
 	},
 }
 
