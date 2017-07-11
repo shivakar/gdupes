@@ -27,11 +27,12 @@ Usage:
 
 Flags:
   -h, --help        Display this help message
+  -n, --noempty     Exclude zero-length/empty files
   -r, --recurse     Recurse through subdirectories
   -1, --sameline    List set of matches on the same line
   -m, --summarize   Summarize duplicates information
   -v, --version     Display gdupes version
-```
+  ```
 
 ## Contributing
 

@@ -69,7 +69,7 @@ func TestGdupes(t *testing.T) {
 		dupfiles, err := gdupes.Run(c, dirs)
 		assert.Nil(err)
 		assert.True(isStringSSEqual(expected, dupfiles),
-			"expected: %v,\ngot %v\n", expected, dupfiles)
+			"expected: %v,\ngot: %v\n", expected, dupfiles)
 	})
 
 	c.PrintVersion = true
@@ -159,7 +159,22 @@ func TestGdupes(t *testing.T) {
 		aSlices := splitStrOutput(actual)
 
 		assert.True(isStringSSEqual(eSlices, aSlices),
-			"expected: %v,\ngot %v\n", expected, actual)
+			"expected: %v,\ngot: %v\n", expected, actual)
 	})
 	c.Sameline = false
+
+	c.NoEmpty = true
+	t.Run("--noempty", func(t *testing.T) {
+		expected := [][]string{
+			{"testdata/b_hardlink.txt", "testdata/b_copy.txt"},
+			{"testdata/a.txt", "testdata/a_copy.txt", "testdata/a_copy_copy.txt"},
+		}
+
+		actual, err := gdupes.Run(c, dirs)
+		assert := assert.New(t)
+		assert.Nil(err)
+		assert.True(isStringSSEqual(expected, actual),
+			"expected: %v,\ngot: %v\n", expected, actual)
+	})
+	c.NoEmpty = false
 }

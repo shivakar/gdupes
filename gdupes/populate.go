@@ -9,6 +9,9 @@ import (
 // includeFileForProcessing checks fileinfo against the requested configuration.
 // Returns true if the file is to be included for processing, false otherwise
 func includeFileForProcessing(c *Config, f os.FileInfo) bool {
+	if c.NoEmpty && f.Size() == 0 {
+		return false
+	}
 	// If not a regular file (this includes directories and symlinks)
 	// don't add to the channel
 	if !f.Mode().IsRegular() {
