@@ -124,7 +124,7 @@ func TestGdupes(t *testing.T) {
 	c.Summarize = true
 	buf.Reset()
 	t.Run("--recurse --summarize", func(t *testing.T) {
-		expected := "11 duplicate files (in 4 sets), occupying 24 B.\nTotal time for processing: "
+		expected := "10 duplicate files (in 3 sets), occupying 16 B.\nTotal time for processing: "
 		gdupes.Run(c, dirs)
 		assert := assert.New(t)
 		assert.Equal(expected, buf.String()[:len(expected)])
