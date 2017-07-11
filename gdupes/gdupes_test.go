@@ -90,4 +90,44 @@ func TestGdupes(t *testing.T) {
 		assert.Equal(expected, buf.String()[:len(expected)])
 	})
 	c.Summarize = false
+
+	c.Recurse = true
+	buf.Reset()
+	t.Run("--recurse", func(t *testing.T) {
+		expected := [][]string{
+			{"testdata/dir1/zero_copy.txt",
+				"testdata/zero.txt",
+				"testdata/dir1/.hidden_copy.txt",
+				"testdata/.hidden.txt",
+				"testdata/dir1/e.txt",
+				"testdata/dir2/dir3/zero.txt",
+				"testdata/dir4/.zerohidden.txt"},
+			{"testdata/d.txt",
+				"testdata/dir2/dir3/d_hardlink.txt"},
+			{"testdata/b_hardlink.txt",
+				"testdata/b_copy.txt"},
+			{"testdata/a.txt",
+				"testdata/a_copy.txt",
+				"testdata/a_copy_copy.txt",
+				"testdata/dir1/a.txt"},
+		}
+		assert := assert.New(t)
+		dupfiles, err := gdupes.Run(c, dirs)
+		assert.Nil(err)
+		assert.True(isStringSSEqual(expected, dupfiles),
+			"expected: %v,\ngot %v\n", expected, dupfiles)
+	})
+	c.Recurse = false
+
+	c.Recurse = true
+	c.Summarize = true
+	buf.Reset()
+	t.Run("--recurse --summarize", func(t *testing.T) {
+		expected := "11 duplicate files (in 4 sets), occupying 24 B.\nTotal time for processing: "
+		gdupes.Run(c, dirs)
+		assert := assert.New(t)
+		assert.Equal(expected, buf.String()[:len(expected)])
+	})
+	c.Recurse = false
+	c.Summarize = false
 }

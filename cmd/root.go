@@ -51,7 +51,7 @@ func Execute() {
 }
 
 func init() {
-	// RootCmd.Flags().BoolVarP(&config.Recurse, "recurse", "r", false, "Recurse through subdirectories")
+	RootCmd.Flags().BoolVarP(&config.Recurse, "recurse", "r", false, "Recurse through subdirectories")
 	// RootCmd.Flags().BoolVarP(&config.Symlinks, "symlinks", "s", false, "Follow symlinks")
 	// RootCmd.Flags().BoolVarP(&config.Hardlinks, "hardlinks", "H", false, "Treat hardlinks as duplicates")
 	// RootCmd.Flags().BoolVarP(&config.NoEmpty, "noempty", "n", false, "Exclude zero-length/empty files")

@@ -3,7 +3,7 @@
 # gdupes
 A multithreaded tool for identifying duplicate files written in Go.
 
-gdupes is greatly inspired by [fdupes](https://github.com/adrianlopezroche/fdupes)
+gdupes CLI is greatly inspired by [fdupes](https://github.com/adrianlopezroche/fdupes). One of the design goals was to keep the option flags and the tool output as close to fdupes as possible to be a viable drop-in replacement.
 
 ## Installation
 
@@ -27,8 +27,9 @@ Usage:
 
 Flags:
   -h, --help        Display this help message
+  -r, --recurse     Recurse through subdirectories
   -m, --summarize   Summarize duplicates information
-  -v, --version     Display gdupes versiongdu
+  -v, --version     Display gdupes version
 ```
 
 ## Contributing
