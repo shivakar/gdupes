@@ -28,6 +28,7 @@ Usage:
 Flags:
   -h, --help        Display this help message
   -r, --recurse     Recurse through subdirectories
+  -1, --sameline    List set of matches on the same line
   -m, --summarize   Summarize duplicates information
   -v, --version     Display gdupes version
 ```

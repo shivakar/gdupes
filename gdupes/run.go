@@ -60,17 +60,6 @@ func Run(c *Config, args []string) ([][]string, error) {
 	}
 	wg.Wait()
 
-	if !c.Summarize {
-		for _, s := range fileHashes {
-			if len(s) > 1 {
-				for _, v := range s {
-					fmt.Fprintln(c.Writer, v.Path)
-				}
-				fmt.Fprintln(c.Writer)
-			}
-		}
-	}
-
 	nSets := 0
 	nDups := 0
 	tSize := int64(0)
@@ -88,6 +77,19 @@ func Run(c *Config, args []string) ([][]string, error) {
 			duplicates := v.GetFilenames()
 			sort.Strings(duplicates)
 			out = append(out, duplicates)
+		}
+	}
+
+	suffix := "\n"
+	if c.Sameline {
+		suffix = " "
+	}
+	if !c.Summarize {
+		for _, s := range out {
+			for _, v := range s {
+				fmt.Fprintf(c.Writer, "%s%s", v, suffix)
+			}
+			fmt.Fprintln(c.Writer)
 		}
 	}
 

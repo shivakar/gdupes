@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"sort"
+	"strings"
 	"testing"
 
 	"github.com/shivakar/gdupes/gdupes"
@@ -130,4 +131,35 @@ func TestGdupes(t *testing.T) {
 	})
 	c.Recurse = false
 	c.Summarize = false
+
+	c.Sameline = true
+	buf.Reset()
+	t.Run("--sameline", func(t *testing.T) {
+		expected := "testdata/zero.txt testdata/.hidden.txt \n" +
+			"testdata/b_hardlink.txt testdata/b_copy.txt \n" +
+			"testdata/a.txt testdata/a_copy.txt testdata/a_copy_copy.txt \n"
+		gdupes.Run(c, dirs)
+		assert := assert.New(t)
+
+		actual := buf.String()
+		assert.Equal(len(expected), len(actual))
+		assert.Equal(len(strings.Split(expected, "\n")), len(strings.Split(actual, "\n")))
+
+		splitStrOutput := func(s string) [][]string {
+			out := [][]string{}
+			for _, v := range strings.Split(s, "\n") {
+				temp := strings.Split(v, " ")
+				sort.Strings(temp)
+				out = append(out, temp)
+			}
+			return out
+		}
+
+		eSlices := splitStrOutput(expected)
+		aSlices := splitStrOutput(actual)
+
+		assert.True(isStringSSEqual(eSlices, aSlices),
+			"expected: %v,\ngot %v\n", expected, actual)
+	})
+	c.Sameline = false
 }
