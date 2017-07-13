@@ -26,6 +26,7 @@ Usage:
   gdupes DIRECTORY... [flags]
 
 Flags:
+  -H, --hardlinks   Treat hardlinks as duplicates
   -h, --help        Display this help message
   -n, --noempty     Exclude zero-length/empty files
   -A, --nohidden    Exclude hidden files (POSIX only)
