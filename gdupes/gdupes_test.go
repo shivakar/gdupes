@@ -177,4 +177,19 @@ func TestGdupes(t *testing.T) {
 			"expected: %v,\ngot: %v\n", expected, actual)
 	})
 	c.NoEmpty = false
+
+	c.NoHidden = true
+	t.Run("--nohidden", func(t *testing.T) {
+		expected := [][]string{
+			{"testdata/b_copy.txt", "testdata/b_hardlink.txt"},
+			{"testdata/a.txt", "testdata/a_copy.txt",
+				"testdata/a_copy_copy.txt"},
+		}
+		actual, err := gdupes.Run(c, dirs)
+		assert := assert.New(t)
+		assert.Nil(err)
+		assert.True(isStringSSEqual(expected, actual),
+			"expected: %v,\ngot: %v\n", expected, actual)
+	})
+	c.NoHidden = false
 }

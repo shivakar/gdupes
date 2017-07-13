@@ -9,6 +9,9 @@ import (
 // includeFileForProcessing checks fileinfo against the requested configuration.
 // Returns true if the file is to be included for processing, false otherwise
 func includeFileForProcessing(c *Config, f os.FileInfo) bool {
+	if c.NoHidden && f.Name()[:1] == "." {
+		return false
+	}
 	if c.NoEmpty && f.Size() == 0 {
 		return false
 	}

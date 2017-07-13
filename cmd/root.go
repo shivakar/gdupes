@@ -55,7 +55,7 @@ func init() {
 	// RootCmd.Flags().BoolVarP(&config.Symlinks, "symlinks", "s", false, "Follow symlinks")
 	// RootCmd.Flags().BoolVarP(&config.Hardlinks, "hardlinks", "H", false, "Treat hardlinks as duplicates")
 	RootCmd.Flags().BoolVarP(&config.NoEmpty, "noempty", "n", false, "Exclude zero-length/empty files")
-	// RootCmd.Flags().BoolVarP(&config.NoHidden, "nohidden", "A", false, "Exclude hidden files")
+	RootCmd.Flags().BoolVarP(&config.NoHidden, "nohidden", "A", false, "Exclude hidden files (POSIX only)")
 	RootCmd.Flags().BoolVarP(&config.Sameline, "sameline", "1", false, "List set of matches on the same line")
 	// RootCmd.Flags().BoolVarP(&config.Size, "size", "S", true, "Show size of duplicate files")
 	RootCmd.Flags().BoolVarP(&config.Summarize, "summarize", "m", false, "Summarize duplicates information")

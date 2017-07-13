@@ -14,8 +14,9 @@ install:
     - go get github.com/stretchr/testify
     - go get github.com/spf13/cobra
     - go get github.com/shivakar/xxhash
-    - cd testdata && rm b_hardlink.txt && ln b.txt b_hardlink.txt && cd ..
-    - cd testdata/dir2/dir3 && rm d_hardlink.txt && ln ../../d.txt d_hardlink.txt && cd ../../..
+    - ./create_hardlinks.sh
+#- cd testdata && rm b_hardlink.txt && ln b.txt b_hardlink.txt && cd ..
+#- cd testdata/dir2/dir3 && rm d_hardlink.txt && ln ../../d.txt d_hardlink.txt && cd ../../..
 
 #script:
 #  - $HOME/gopath/bin/goveralls -service=travis-ci
