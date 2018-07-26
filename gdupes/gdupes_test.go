@@ -43,7 +43,7 @@ func isStringSSEqual(e [][]string, a [][]string) bool {
 }
 
 func TestGdupes(t *testing.T) {
-	c := &gdupes.Config{}
+	c := &gdupes.Config{NumWorkers: 2}
 	dirs := []string{"testdata"}
 	buf := &bytes.Buffer{}
 	if err := os.Chdir(".."); err != nil {

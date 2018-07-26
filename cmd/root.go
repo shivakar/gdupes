@@ -23,6 +23,7 @@ package cmd
 import (
 	"fmt"
 	"os"
+	"runtime"
 
 	"github.com/shivakar/gdupes/gdupes"
 	"github.com/spf13/cobra"
@@ -51,6 +52,7 @@ func Execute() {
 }
 
 func init() {
+	RootCmd.Flags().IntVarP(&config.NumWorkers, "concurrency", "c", 2*runtime.NumCPU(), "Number of concurrent threads to use")
 	RootCmd.Flags().BoolVarP(&config.Recurse, "recurse", "r", false, "Recurse through subdirectories")
 	// RootCmd.Flags().BoolVarP(&config.Symlinks, "symlinks", "s", false, "Follow symlinks")
 	RootCmd.Flags().BoolVarP(&config.Hardlinks, "hardlinks", "H", false, "Treat hardlinks as duplicates")

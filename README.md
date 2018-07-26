@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/shivakar/gdupes.svg?branch=master)](https://travis-ci.org/shivakar/gdupes)
+[![codecov](https://codecov.io/gh/shivakar/gdupes/branch/master/graph/badge.svg)](https://codecov.io/gh/shivakar/gdupes)
 
 # gdupes
 A multithreaded tool for identifying duplicate files written in Go.
