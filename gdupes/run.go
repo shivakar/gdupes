@@ -4,7 +4,6 @@ import (
 	"errors"
 	"fmt"
 	"os"
-	"runtime"
 	"sort"
 	"sync"
 	"time"
@@ -24,7 +23,6 @@ func checkAddDirectory(dirs []string, d string) []string {
 // Run orchestrates gdupes execution
 func Run(c *Config, args []string) ([][]string, error) {
 	st := time.Now()
-	c.NumWorkers = 2 * runtime.NumCPU()
 	if c.Writer == nil {
 		c.Writer = os.Stdout
 	}
