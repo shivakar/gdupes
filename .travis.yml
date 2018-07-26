@@ -1,20 +1,14 @@
 language: go
 
 go:
-  - 1.7
-  - 1.8
-  - tip
-
-#before_install:
-#  - go get github.com/axw/gocov/gocov
-#  - go get github.com/mattn/goveralls
-#  - go get golang.org/x/tools/cmd/cover
+  - 1.10.3
 
 install:
-    - go get github.com/stretchr/testify
-    - go get github.com/spf13/cobra
-    - go get github.com/shivakar/xxhash
-    - ./create_hardlinks.sh
+  - go get github.com/stretchr/testify
+  - go get github.com/spf13/cobra
+  - go get github.com/shivakar/xxhash
+  - ./create_hardlinks.sh
 
-#script:
-#  - $HOME/gopath/bin/goveralls -service=travis-ci
+script:
+  - go test -v -race -cover -coverprofile=coverage.txt -covermode=atomic ./...
+
