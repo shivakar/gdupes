@@ -1,4 +1,3 @@
-[![Build Status](https://travis-ci.org/shivakar/gdupes.svg?branch=master)](https://travis-ci.org/shivakar/gdupes)
 [![codecov](https://codecov.io/gh/shivakar/gdupes/branch/master/graph/badge.svg)](https://codecov.io/gh/shivakar/gdupes)
 
 # gdupes
@@ -9,7 +8,7 @@ gdupes CLI is greatly inspired by [fdupes](https://github.com/adrianlopezroche/f
 ## Installation
 
 ```
-go get -u github.com/shivakar/gdupes
+go install github.com/shivakar/gdupes@latest
 ```
 
 ## Usage
